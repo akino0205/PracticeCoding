@@ -4,7 +4,7 @@ using System.Collections;
 using System.Text;
 #region Console write
 Console.WriteLine("================ Select Number! ================");
-Console.WriteLine("1.백준 14719 빗물");
+Console.WriteLine("1-1.백준 14719 빗물");
 Console.WriteLine("================     조건문     ================");
 Console.WriteLine("2-1.백준 9498 시험 성적");
 Console.WriteLine("2-2.백준 2753 윤년");
@@ -20,11 +20,16 @@ Console.WriteLine("3-5.백준 2438 별찍기 - 1");
 Console.WriteLine("================     문자열     ================");
 Console.WriteLine("4-1.백준 11654 아스키 코드");
 Console.WriteLine("4-2.백준 11720 숫자의 합");
+Console.WriteLine("4-3.백준 10809 알파벳 찾기");
+Console.WriteLine("4-4.백준 2675 문자열 반복");
+Console.WriteLine("4-5.백준 1157 단어 공부");
+Console.WriteLine("4-6.백준 1152 단어의 개수");
+Console.WriteLine("4-7.백준 9012 괄호");
 #endregion Console write
 
 switch (Console.ReadLine())
 {
-    case "1": RainWaterSum(); break;
+    case "1-1": RainWaterSum(); break;
     case "2-1": ExamResult(); break;
     case "2-2": IsLeapYear(); break;
     case "2-3": WhichQuadrant(); break;
@@ -37,6 +42,11 @@ switch (Console.ReadLine())
     case "3-5": WriteStars(); break;
     case "4-1": AsciiCode(); break;
     case "4-2": SumNumbers(); break;
+    case "4-3": FindAlphabet(); break;
+    case "4-4": RepeatString(); break;
+    case "4-5": StudyWord(); break;
+    case "4-6": WordCount(); break;
+    case "4-7": ParenthesisString(); break;
     default: break;
 }
 /// <summary>
@@ -292,6 +302,112 @@ void SumNumbers()
         result += int.Parse(numChar.ToString());
     }
     Console.Write(result);
+}
+/// <summary>
+/// 백준 10809 알파벳 찾기
+/// : 알파벳 소문자로만 이루어진 단어 S가 주어진다. 각각의 알파벳에 대해서, 단어에 포함되어 있는 경우에는 처음 등장하는 위치를, 포함되어 있지 않은 경우에는 -1을 출력하는 프로그램을 작성하시오.
+/// </summary>
+void FindAlphabet()
+{
+    string word = Console.ReadLine();
+    int a = 97;
+    int z = 122;
+    int size = z - a + 1;
+    int[] alphabetArr = new int[size];
+    for (int i = 0; i < size; i++) alphabetArr[i] = -1;
+    foreach(var item in word.Select( (item, seq) => new { Letter = item, Seq = seq}))
+    {
+        int alphabetArrSeq = item.Letter - a;
+        if (alphabetArr[alphabetArrSeq] == -1)
+            alphabetArr[alphabetArrSeq] = item.Seq;
+    }
+    Console.Write(String.Join(" ", alphabetArr));
+}
+/// <summary>
+/// 2675 문자열 반복
+/// : 문자열 S를 입력받은 후에, 각 문자를 R번 반복해 새 문자열 P를 만든 후 출력하는 프로그램을 작성하시오. 
+/// 즉, 첫 번째 문자를 R번 반복하고, 두 번째 문자를 R번 반복하는 식으로 P를 만들면 된다. 
+/// S에는 QR Code "alphanumeric" 문자만 들어있다. 
+/// QR Code "alphanumeric" 문자는 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ\$%*+-./: 이다.
+/// </summary>
+void RepeatString()
+{
+    int caseCount = int.Parse(Console.ReadLine());
+    StringBuilder sb = new StringBuilder();
+    for(int i = 0; i < caseCount; i++)
+    {
+        string[] input = Console.ReadLine().Split();
+        int repeatCount = int.Parse(input[0]);
+        foreach(var letter in input[1])
+        {
+            for (int j = 0; j < repeatCount; j++) sb.Append(letter);
+        }
+        sb.Append("\n");
+    }
+    Console.WriteLine(sb.ToString());
+}
+/// <summary>
+/// 백준 1157 단어 공부
+/// : 알파벳 대소문자로 된 단어가 주어지면, 이 단어에서 가장 많이 사용된 알파벳이 무엇인지 알아내는 프로그램을 작성하시오. 
+/// 단, 대문자와 소문자를 구분하지 않는다.
+/// 입력 : 첫째 줄에 알파벳 대소문자로 이루어진 단어가 주어진다. 주어지는 단어의 길이는 1,000,000을 넘지 않는다.
+/// 출력 : 첫째 줄에 이 단어에서 가장 많이 사용된 알파벳을 대문자로 출력한다. 단, 가장 많이 사용된 알파벳이 여러 개 존재하는 경우에는 ?를 출력한다.
+/// </summary>
+void StudyWord()
+{
+    string inputUpperWord = Console.ReadLine().ToUpper();
+    Dictionary<char, int> letterDic = inputUpperWord.GroupBy(g => g).ToDictionary( k=> k.Key, v => v.Count());
+    var maxCount = letterDic.Max(m => m.Value);
+    var maxLetters = letterDic.Where(w => w.Value.Equals(maxCount));
+    if (maxLetters.Count() > 1) Console.WriteLine("?");
+    else Console.WriteLine(maxLetters.SingleOrDefault().Key);
+}
+/// <summary>
+/// 백준 1152 단어의 개수
+///  : 영어 대소문자와 공백으로 이루어진 문자열이 주어진다. 
+///  이 문자열에는 몇 개의 단어가 있을까? 이를 구하는 프로그램을 작성하시오. 
+///  단, 한 단어가 여러 번 등장하면 등장한 횟수만큼 모두 세어야 한다.
+///  (주의) 입력에서 공백이 연속해서 나오는 경우는 없다고 하나, 채점기준에서는 공백이 연속으로 나오는 경우도 함께 채점됨. 
+/// </summary>
+void WordCount()
+{
+    string[] input = Console.ReadLine().Trim().Split();
+    string[] exceptBlank = input.Where(w => !w.Equals(string.Empty)).ToArray();
+    Console.WriteLine(exceptBlank.Count());
+}
+/// <summary>
+/// 백준 9012 괄호 
+/// : 괄호 문자열(Parenthesis String, PS)은 두 개의 괄호 기호인 ‘(’ 와 ‘)’ 만으로 구성되어 있는 문자열이다. 
+/// 그 중에서 괄호의 모양이 바르게 구성된 문자열을 올바른 괄호 문자열(Valid PS, VPS)이라고 부른다. 
+/// 한 쌍의 괄호 기호로 된 “( )” 문자열은 기본 VPS 이라고 부른다. 
+/// 만일 x 가 VPS 라면 이것을 하나의 괄호에 넣은 새로운 문자열 “(x)”도 VPS 가 된다. 
+/// 그리고 두 VPS x 와 y를 접합(concatenation)시킨 새로운 문자열 xy도 VPS 가 된다. 
+/// 예를 들어 “(())()”와 “((()))” 는 VPS 이지만 “(()(”, “(())()))” , 그리고 “(()” 는 모두 VPS 가 아닌 문자열이다. 
+/// 여러분은 입력으로 주어진 괄호 문자열이 VPS 인지 아닌지를 판단해서 그 결과를 YES 와 NO 로 나타내어야 한다. 
+/// </summary>
+void ParenthesisString()
+{
+    int caseCount = int.Parse(Console.ReadLine());
+    StringBuilder sb = new StringBuilder();
+    for(int seq = 0; seq < caseCount; seq++)
+    {
+        string ps = Console.ReadLine();
+        int checkInt = 0;
+        bool isVPS = true;
+        foreach(var str in ps)
+        {
+            checkInt = str.Equals('(') ? checkInt+1 : checkInt-1;
+            if (checkInt < 0)
+            {
+                isVPS = false; 
+                break;
+            }
+        }
+        isVPS = checkInt == 0 ? true : false;
+        sb.Append(isVPS ? "YES" : "NO");
+        sb.Append("\n");
+    }
+    Console.WriteLine(sb.ToString());
 }
 #endregion 문자열
 
