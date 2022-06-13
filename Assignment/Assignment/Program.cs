@@ -17,6 +17,16 @@ Console.WriteLine("3-2.백준 2742 기찍 N");
 Console.WriteLine("3-3.백준 11021 A+B - 7");
 Console.WriteLine("3-4.백준 11022 A+B - 8");
 Console.WriteLine("3-5.백준 2438 별찍기 - 1");
+Console.WriteLine("3-6.백준 2439 별찍기 - 2");
+Console.WriteLine("3-7.백준 10871 X보다 작은 수");
+Console.WriteLine("================     1차원 배열     ================");
+Console.WriteLine("5-1.백준 10818 최소, 최대");
+Console.WriteLine("5-2.백준 2562 최댓값");
+Console.WriteLine("5-3.백준 2577 숫자의 개수");
+Console.WriteLine("5-4.백준 3052 나머지");
+Console.WriteLine("================     함수     ================");
+Console.WriteLine("6-1.백준 4673 셀프 넘버");
+Console.WriteLine("6-2.백준 1065 한수");
 Console.WriteLine("================     문자열     ================");
 Console.WriteLine("4-1.백준 11654 아스키 코드");
 Console.WriteLine("4-2.백준 11720 숫자의 합");
@@ -29,6 +39,7 @@ Console.WriteLine("4-7.백준 9012 괄호");
 
 switch (Console.ReadLine())
 {
+    #region -06.02
     case "1-1": RainWaterSum(); break;
     case "2-1": ExamResult(); break;
     case "2-2": IsLeapYear(); break;
@@ -47,6 +58,17 @@ switch (Console.ReadLine())
     case "4-5": StudyWord(); break;
     case "4-6": WordCount(); break;
     case "4-7": ParenthesisString(); break;
+    #endregion -06.02
+    #region -06.09
+    case "3-6": WriteStars2(); break;
+    case "3-7": LessThanX(); break;
+    case "5-1": MinMax(); break;
+    case "5-2": Max(); break;
+    case "5-3": NumberCount(); break;
+    case "5-4": Remainder42(); break;
+    case "6-1": SelfNumber(); break;
+    #endregion -06.09
+    case "6-2": HanSu(); break;
     default: break;
 }
 /// <summary>
@@ -276,7 +298,164 @@ void WriteStars()
     }
     Console.WriteLine(sb.ToString());
 }
+/// <summary>
+/// 3-6. 백준 2439 별찍기 - 2 
+/// 첫째 줄에는 별 1개, 둘째 줄에는 별 2개, N번째 줄에는 별 N개를 찍는 문제.
+/// 하지만, 오른쪽을 기준으로 정렬한 별(예제 참고)을 출력하시오.
+/// </summary>
+void WriteStars2()
+{
+    int lines = int.Parse(Console.ReadLine());
+    StringBuilder sb = new();
+    for(int line = 1; line <= lines; line++)
+    {
+        for(int space= 1; space <= lines - line; space++)
+        {
+            sb.Append(" ");
+        }
+        for (int star = 1; star <= line; star++)
+        {
+            sb.Append("*");
+        }
+        sb.Append("\n");
+    }
+    Console.Write(sb.ToString());
+}
+/// <summary>
+/// 3-7.백준 10871 X보다 작은 수
+/// 정수 N개로 이루어진 수열 A와 정수 X가 주어진다. 이때, A에서 X보다 작은 수를 모두 출력하는 프로그램을 작성하시오.
+/// </summary>
+void LessThanX()
+{
+    string[] temp = Console.ReadLine().Split();
+    int N = int.Parse(temp[0]);
+    int X = int.Parse(temp[1]);
+    int[] numbers = Console.ReadLine().Split().Select( s=> int.Parse(s)).ToArray();
+    StringBuilder sb = new();
+    foreach(var num in numbers)
+    {
+        if (num < X) sb.Append(num + " ");
+    }
+    Console.WriteLine(sb.ToString().Trim());
+}
 #endregion 반복문
+#region 1차원 배열
+/// <summary>
+/// 5-1.백준 10818 최소, 최대
+/// N개의 정수가 주어진다. 이때, 최솟값과 최댓값을 구하는 프로그램을 작성하시오.
+/// </summary>
+void MinMax()
+{
+    int count = int.Parse(Console.ReadLine());
+    int[] numbers = Console.ReadLine().Split().Select(s => int.Parse(s)).ToArray();
+    Console.Write($"{numbers.Min()} {numbers.Max()}");
+}
+/// <summary>
+/// 5-2.백준 2562 최댓값
+/// 9개의 서로 다른 자연수가 주어질 때, 이들 중 최댓값을 찾고 그 최댓값이 몇 번째 수인지를 구하는 프로그램을 작성하시오.
+/// 예를 들어, 서로 다른 9개의 자연수
+/// 3, 29, 38, 12, 57, 74, 40, 85, 61
+/// 이 주어지면, 이들 중 최댓값은 85이고, 이 값은 8번째 수이다.
+/// </summary>
+void Max()
+{
+    int[] numbers = new int[9];
+    for(int i = 0; i < 9; i++)
+    {
+        numbers[i] = int.Parse(Console.ReadLine());
+    }
+    int max = numbers.Max();
+    int index = Array.IndexOf(numbers, max);
+    Console.WriteLine($"{max}\n{index+1}");
+}
+/// <summary>
+/// 5-3.백준 2577 숫자의 개수
+/// 세 개의 자연수 A, B, C가 주어질 때 A × B × C를 계산한 결과에 0부터 9까지 각각의 숫자가 몇 번씩 쓰였는지를 구하는 프로그램을 작성하시오.
+/// 예를 들어 A = 150, B = 266, C = 427 이라면 A × B × C = 150 × 266 × 427 = 17037300 이 되고, 계산한 결과 17037300 에는 0이 3번, 1이 1번, 3이 2번, 7이 2번 쓰였다.
+/// </summary>
+void NumberCount()
+{
+    int[] numbers = new int[3];
+    for (int i = 0; i < 3; i++)
+    {
+        numbers[i] = int.Parse(Console.ReadLine());
+    }
+    int result = numbers[0] * numbers[1] * numbers[2];
+
+    int[] numberCount = new int[10];
+    foreach(var numChar in result.ToString())
+    {
+        numberCount[int.Parse(numChar.ToString())] += 1;
+    }
+    foreach(var count in numberCount)
+    {
+        Console.WriteLine(count);
+    }
+}
+/// <summary>
+/// 5-4.백준 3052 나머지
+/// 두 자연수 A와 B가 있을 때, A%B는 A를 B로 나눈 나머지 이다. 예를 들어, 7, 14, 27, 38을 3으로 나눈 나머지는 1, 2, 0, 2이다. 
+/// 수 10개를 입력받은 뒤, 이를 42로 나눈 나머지를 구한다. 그 다음 서로 다른 값이 몇 개 있는지 출력하는 프로그램을 작성하시오.
+/// </summary>
+void Remainder42()
+{
+    int[] remainders = new int[10];
+    for (int i = 0; i < 10; i++)
+    {
+        remainders[i] = -1;
+    }
+
+    int count = 1;
+    for (int i = 0; i < 10; i++)
+    {
+        int num = int.Parse(Console.ReadLine());
+        int current = num % 42;
+        if (i != 0)
+        {
+            if (!remainders.Contains(current))
+                count++;
+        }
+        remainders[i] = current;
+    }
+    Console.WriteLine(count);
+}
+#endregion 1차원 배열
+#region 함수
+/// <summary>
+/// 6-1.백준 4673 셀프 넘버 
+/// </summary>
+void SelfNumber()
+{
+    bool[] nonSelfNumbers = new bool[10001];
+
+    for (int i = 1; i < nonSelfNumbers.Length; i++)
+    {
+        int result = d(i);
+        if (result < 10001)
+            nonSelfNumbers[result] = true;
+    }
+    for (int i = 1;i < nonSelfNumbers.Length; i++)
+    {
+        if(!nonSelfNumbers[i])
+            Console.WriteLine(i);
+    }
+}
+int d(int number)
+{     
+    foreach(var numChar in number.ToString())
+    {
+        number += int.Parse(numChar.ToString());
+    }
+    return number;
+}
+/// <summary>
+/// 6-2.백준 1065 한수
+/// </summary>
+void HanSu()
+{
+
+}
+#endregion 함수
 #region 문자열
 /// <summary>
 /// 백준 11654 아스키 코드
