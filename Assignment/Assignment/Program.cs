@@ -35,6 +35,8 @@ Console.WriteLine("4-4.백준 2675 문자열 반복");
 Console.WriteLine("4-5.백준 1157 단어 공부");
 Console.WriteLine("4-6.백준 1152 단어의 개수");
 Console.WriteLine("4-7.백준 9012 괄호");
+Console.WriteLine("4-8.백준 5622 다이얼");
+Console.WriteLine("4-8.백준 2941 크로아티아알파벳");
 #endregion Console write
 
 switch (Console.ReadLine())
@@ -69,6 +71,8 @@ switch (Console.ReadLine())
     case "6-1": SelfNumber(); break;
     #endregion -06.09
     case "6-2": HanSu(); break;
+    case "4-8": Dial(); break;
+    case "4-9": CroatiaAlphabet(); break;
     default: break;
 }
 /// <summary>
@@ -453,7 +457,22 @@ int d(int number)
 /// </summary>
 void HanSu()
 {
-
+    int num = int.Parse(Console.ReadLine());
+    if(num < 100)
+        Console.WriteLine(num);
+    else
+    {
+        int hansu = 99;
+        for(int currentNum = 100; currentNum <= num; currentNum++)
+        {
+            int hundred = currentNum / 100;
+            int ten = currentNum / 10 % 10;
+            int one = currentNum % 10;
+            if ((hundred - ten) == (ten - one))
+                hansu++;
+        }
+        Console.WriteLine(hansu);
+    }
 }
 #endregion 함수
 #region 문자열
@@ -587,6 +606,37 @@ void ParenthesisString()
         sb.Append("\n");
     }
     Console.WriteLine(sb.ToString());
+}
+/// <summary>
+/// 백준 5622 다이얼 : 
+/// </summary>
+void Dial()
+{
+    string word = Console.ReadLine();
+    int second = 0;
+    int A = 65;
+    int[] SVYZ = { 83, 86, 89, 90 };
+    foreach(char item in word)
+    {
+        int additionSecond = (item - A) / 3 + 3;
+        if (SVYZ.Contains(item))
+            additionSecond -= 1;
+        second += additionSecond;
+    }
+    Console.WriteLine(second);
+}
+/// <summary>
+/// 백준 2941 크로아티아알파벳 :
+/// </summary>
+void CroatiaAlphabet()
+{
+    string croatiaWords = Console.ReadLine();
+    string[] countOneArr = {"c=", "c-", "dz=", "d-", "lj", "nj", "s=", "z=" };
+    foreach(var item in countOneArr)
+    {
+        croatiaWords = croatiaWords.Replace(item, "#");
+    }
+    Console.WriteLine(croatiaWords.ToCharArray().Count());
 }
 #endregion 문자열
 
