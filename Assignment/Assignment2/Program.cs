@@ -11,6 +11,9 @@ Console.WriteLine("3.백준 1193번 분수찾기");
 Console.WriteLine("4.백준 2775번 부녀회장이 될테야");
 Console.WriteLine("5.백준 10757번 큰수 A+B");
 Console.WriteLine("6.백준 1978번 소수찾기");
+Console.WriteLine("7.백준 24416번 알고리즘 수업 피보나치 수1");
+Console.WriteLine("8.백준 9184번 신나는 함수 실행");
+Console.WriteLine("9.백준 9461번 파도반 수열");
 #endregion Console write
 
 switch (Console.ReadLine())
@@ -18,11 +21,19 @@ switch (Console.ReadLine())
     case "1": BreakEvenPoint(); break;
     case "2": Honeycomb(); break;
     case "3": FindFraction(); break;
+    #region 0707
     case "4": WomensPresident(); break;
     case "5": BigNumAPlusB(); break;
     case "6": FindSosu(); break;
+    #endregion 0707
+    #region 0714
+    case "7": Fibonacci(); break;
+    case "8": ExecuteFunction(); break;
+    case "9": PadovanSequence(); break;
+    #endregion 0714
     default: break;
 }
+
 #region 백준 기본수학
 /// <summary>
 /// 백준 1712번 손익분기점
@@ -80,7 +91,6 @@ void FindFraction()
     Console.WriteLine(result);
 }
 #endregion 백준 기본수학
-
 #region 0707
 /// <summary>
 /// 백준 2775번 부녀회장이 될테야
@@ -157,3 +167,116 @@ bool IsSosu(int num)
 }
 
 #endregion 0707
+#region 0714
+/// <summary>
+/// 백준 24416번 알고리즘 수업 피보나치 수1
+/// https://www.acmicpc.net/problem/24416
+/// </summary>
+void Fibonacci()
+{
+    int input = int.Parse(Console.ReadLine());
+    int result1 = fib(input);
+    int result2 = fibonacci(input);
+    Console.WriteLine($"{result1} {result2}");
+}
+int fib(int n)
+{
+    if (n == 1 || n == 2)
+        return 1;
+    else
+        return (fib(n - 1) + fib(n - 2));
+}
+int fibonacci(int n)
+{
+    int result = 0;
+    int[] f = new int[n+1];
+    f[1] = f[2] = 1;
+    for(int i = 3; i <= n; i++)
+    {
+        f[i] = f[i - 1] + f[i - 2];
+        result++;
+    }
+    return result;
+}
+/// <summary>
+/// 백준 9184번 신나는 함수 실행
+/// https://www.acmicpc.net/problem/9184
+/// </summary>
+void ExecuteFunction()
+{
+    w = new int[101, 101, 101];
+    StringBuilder sb = new StringBuilder();
+    while (true)
+    {
+        var input = Console.ReadLine().Split().Select(s => int.Parse(s)).ToArray();
+        int result = 0;
+        if (input[0] == -1 && input[1] == -1 && input[2] == -1)
+            break;
+        result = GetWMemoization(input[0], input[1], input[2]);
+        //result = GetW(input[0], input[1], input[2]);
+        sb.AppendLine($"w({input[0]}, {input[1]}, {input[2]}) = {result}");
+    }
+    Console.WriteLine(sb.ToString());
+}
+int GetWMemoization(int a, int b, int c)
+{
+    (int aIdx, int bIdx, int cIdx) = (a + 50, b + 50, c + 50);
+    //int aIdx = a + 50;
+    //int bIdx = b + 50;
+    //int cIdx = c + 50;
+    if (w[aIdx, bIdx, cIdx] != 0)
+        return w[aIdx, bIdx, cIdx];
+    if (a <= 0 || b <= 0 || c <= 0)
+        w[aIdx, bIdx, cIdx] = 1;
+    else if (a > 20 || b > 20 || c > 20)
+        w[aIdx, bIdx, cIdx] = GetWMemoization(20, 20, 20);
+    else if (a < b && b < c)
+        w[aIdx, bIdx, cIdx] = GetWMemoization(a, b, c - 1) + GetWMemoization(a, b - 1, c - 1) - GetWMemoization(a, b - 1, c);
+    else
+        w[aIdx, bIdx, cIdx] = GetWMemoization(a - 1, b, c) + GetWMemoization(a - 1, b - 1, c) + GetWMemoization(a - 1, b, c - 1) - GetWMemoization(a - 1, b - 1, c - 1);
+    return w[aIdx, bIdx, cIdx];
+}
+int GetW(int a, int b, int c)
+{
+    if (a <= 0 || b <= 0 || c <= 0)
+        return 1;
+    else if (a > 20 || b > 20 || c > 20)
+        return GetW(20, 20, 20);
+    else if (a < b && b < c)
+        return GetW(a, b, c - 1) + GetW(a, b - 1, c - 1) - GetW(a, b - 1, c);
+    else
+        return GetW(a - 1, b, c) + GetW(a - 1, b - 1, c) + GetW(a - 1, b, c - 1) - GetW(a - 1, b - 1, c - 1);
+}
+/// <summary>
+/// 9.백준 9461번 파도반 수열
+/// https://www.acmicpc.net/problem/9461
+/// </summary>
+void PadovanSequence()
+{
+    padovanSequenceArr = new long[100];
+    StringBuilder sb = new StringBuilder();
+    int caseCount = int.Parse(Console.ReadLine());
+    for(int idx = 0; idx < caseCount; idx++)
+    {
+        int input = int.Parse(Console.ReadLine());
+        sb.AppendLine(GetPadovanSequence(input).ToString());
+    }
+    Console.WriteLine(sb.ToString());
+}
+long GetPadovanSequence(int cnt)
+{
+    int idx = cnt - 1;
+    if (padovanSequenceArr[idx] != 0)
+        return padovanSequenceArr[idx];
+    else if (cnt == 1 || cnt == 2 || cnt == 3)
+        padovanSequenceArr[idx] = 1;
+    else
+        padovanSequenceArr[idx] = GetPadovanSequence(cnt - 2) + GetPadovanSequence(cnt - 3);
+    return padovanSequenceArr[idx];
+}
+#endregion 0714
+public partial class Program
+{
+    static int[,,] w;
+    static long[] padovanSequenceArr;
+}
