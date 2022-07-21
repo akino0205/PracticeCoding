@@ -14,6 +14,11 @@ Console.WriteLine("6.백준 1978번 소수찾기");
 Console.WriteLine("7.백준 24416번 알고리즘 수업 피보나치 수1");
 Console.WriteLine("8.백준 9184번 신나는 함수 실행");
 Console.WriteLine("9.백준 9461번 파도반 수열");
+Console.WriteLine("================ 동적계획법 ================");
+Console.WriteLine("10.백준 1932번 정수삼각형");
+Console.WriteLine("11.백준 1149번 ");
+Console.WriteLine("12.백준 11054번 ");
+Console.WriteLine("13.백준 11729번 ");
 #endregion Console write
 
 switch (Console.ReadLine())
@@ -31,6 +36,12 @@ switch (Console.ReadLine())
     case "8": ExecuteFunction(); break;
     case "9": PadovanSequence(); break;
     #endregion 0714
+    #region 0721
+    case "10": Triangle(); break;
+    case "11": RGBStreet(); break;
+    case "12": LongestBiotonic(); break;
+    case "13": HanoiTop(); break;
+    #endregion 0721
     default: break;
 }
 
@@ -275,8 +286,102 @@ long GetPadovanSequence(int cnt)
     return padovanSequenceArr[idx];
 }
 #endregion 0714
+#region 0721
+/// <summary>
+/// https://www.acmicpc.net/problem/1932
+/// </summary>
+void Triangle()
+{
+    int line = int.Parse(Console.ReadLine());
+    int[,] inputArr = new int[line, line];
+    for(int i = 0; i < line; i++)
+    {
+        string[] temp = Console.ReadLine().Split();
+        for (int j = 0; j < temp.Length; j++)
+        {
+            inputArr[i,j] = int.Parse(temp[j]);
+        }
+    }
+    int[,] resultArr = new int[line, line];
+    for (int i = 0; i < line; i++)
+    {
+        int idxF = line - i - 1;
+        for (int idxS = 0; idxS < line - i; idxS++)
+        {
+            if (line - i == line)
+                resultArr[idxF, idxS] = inputArr[idxF, idxS];
+            else
+            {
+                int max = resultArr[idxF + 1, idxS] > resultArr[idxF + 1, idxS + 1] ? resultArr[idxF + 1, idxS] : resultArr[idxF + 1, idxS + 1];
+                resultArr[idxF, idxS] = inputArr[idxF, idxS] + max;
+            }
+        }
+    }
+    Console.WriteLine(resultArr[0,0]);
+}
+/// <summary>
+/// https://www.acmicpc.net/problem/1149
+/// </summary>
+void RGBStreet()
+{
+    int line = int.Parse(Console.ReadLine());
+    //input
+    _rgbCostArr = new int[line,3];
+    for(int idxF = 0; idxF < line; idxF++)
+    {
+        string[] temp = Console.ReadLine().Split();
+        _rgbCostArr[idxF, 0] = int.Parse(temp[0]);
+        _rgbCostArr[idxF, 1] = int.Parse(temp[1]);
+        _rgbCostArr[idxF, 2] = int.Parse(temp[2]);
+    }
+
+    //fill
+    _houseCostArr = new int[line, 3];
+    for (int idx = 0; idx < line; idx++)
+    {
+        if (idx == 0)
+        {
+            _houseCostArr[idx, 0] = _rgbCostArr[idx, 0];
+            _houseCostArr[idx, 1] = _rgbCostArr[idx, 1];
+            _houseCostArr[idx, 2] = _rgbCostArr[idx, 2];
+        }
+        else
+        {
+            _houseCostArr[idx, 0] = Math.Min(_houseCostArr[idx-1, 1] , _houseCostArr[idx - 1, 2]) + _rgbCostArr[idx, 0];
+            _houseCostArr[idx, 1] = Math.Min(_houseCostArr[idx-1, 0] , _houseCostArr[idx - 1, 2]) + _rgbCostArr[idx, 1];
+            _houseCostArr[idx, 2] = Math.Min(_houseCostArr[idx-1, 0] , _houseCostArr[idx - 1, 1]) + _rgbCostArr[idx, 2];
+        }
+    }
+
+    //get result
+    int[] resultArr = new int[3];
+    resultArr[0] = _houseCostArr[line-1, 0];
+    resultArr[1] = _houseCostArr[line-1, 1];
+    resultArr[2] = _houseCostArr[line-1, 2];
+
+    Console.WriteLine(resultArr.Min());
+}
+/// <summary>
+/// https://www.acmicpc.net/problem/11054
+/// </summary>
+void LongestBiotonic()
+{
+    i
+}
+/// <summary>
+/// https://www.acmicpc.net/problem/11729
+/// </summary>
+void HanoiTop()
+{
+
+}
+#endregion 0721 
 public partial class Program
 {
     static int[,,] w;
     static long[] padovanSequenceArr;
+    #region RGBStreet
+    static int[,] _rgbCostArr;
+    static int[,] _houseCostArr;
+    #endregion RGBStreet
 }
