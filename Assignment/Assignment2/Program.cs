@@ -366,7 +366,41 @@ void RGBStreet()
 /// </summary>
 void LongestBiotonic()
 {
-    i
+    int size = int.Parse(Console.ReadLine());
+    int[] numbers = Console.ReadLine().Split().Select(s => int.Parse(s)).ToArray();
+    int[] numbersForLeft = (int[])numbers.Clone();
+    int[] numbersForRight = (int[])numbers.Clone();
+    int[] leftSum = new int[size];
+    int[] leftCnt = new int[size];
+    int[] rightSum = new int[size];
+    int[] rightCnt = new int[size];
+    for(int idx = 0; idx < size; idx++)
+    {
+        //left
+        if (idx == 0)
+            leftCnt[idx] = 1;
+        else if (numbersForLeft[idx - 1] < numbersForLeft[idx])
+            leftCnt[idx] += 1;
+        else
+            numbersForLeft[idx] = numbersForLeft[idx - 1];
+
+        //right
+        int idxForRight = size - idx - 1;
+        if (idxForRight == size-1)
+            rightCnt[idxForRight] = 1;
+        else if (numbersForRight[idxForRight] > numbersForRight[idxForRight + 1])
+            rightCnt[idxForRight] += 1;
+        else
+            numbersForLeft[idxForRight] = numbersForRight[idxForRight + 1];
+    }
+
+    //get result
+    int[] result = new int[size];
+    for (int idx = 0; idx < size; idx++)
+    {
+        result[idx] = leftCnt[idx] + rightCnt[idx];
+    }
+     Console.WriteLine(result.Max());
 }
 /// <summary>
 /// https://www.acmicpc.net/problem/11729
