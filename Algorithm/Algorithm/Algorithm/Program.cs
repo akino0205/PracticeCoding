@@ -21,6 +21,25 @@ Console.WriteLine("Remove : " + list.Count());
 #endregion 단방향 링크드리스트 SinglyLinkedList
 
 #region 양방향 링크드리스트
+var dList = new DoublyLinkedList<int>();
+Console.WriteLine("new list : " + dList.Count());
+
+//Add
+dList.AddLast(1);
+dList.AddLast(2);
+dList.AddLast(3);
+Console.WriteLine("AddLast : " + dList.Count());
+Console.WriteLine("dList : " + dList.ToString());
+dList.AddFirst(0);
+Console.WriteLine("AddFirst : " + dList.Count());
+Console.WriteLine("dList : " + dList.ToString());
+dList.AddLast(100);
+Console.WriteLine("AddLast : " + dList.Count());
+Console.WriteLine("dList : " + dList.ToString());
+
+//Remove
+list.Remove(0);
+Console.WriteLine("Remove : " + list.Count());
 #endregion 양방향 링크드리스트
 #endregion 링크드 리스트
 

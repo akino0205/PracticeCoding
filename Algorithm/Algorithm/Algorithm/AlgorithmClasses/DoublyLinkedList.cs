@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace Algorithm.AlgorithmClasses
 {
-    
-    //TODO : 구현해야함.
+
+    //https://docs.microsoft.com/ko-kr/dotnet/api/system.collections.generic.linkedlist-1?view=net-6.0
+    //https://joooootopia.tistory.com/18
+    //https://geukggom.tistory.com/160
     public class DoublyLinkedList<T> where T : struct
     {
         private class Node<T> where T : struct
@@ -28,17 +30,19 @@ namespace Algorithm.AlgorithmClasses
         {
 
         }
+        private void SetFirstNode(Node<T> newNode)
+        {
+            this.head = newNode;
+        }
         /// <summary>
         /// 맨마지막에 추가
         /// </summary>
         /// <param name="newNode">추가할 노드</param>
-        public void Add(T data)
+        public void AddLast(T data)
         {
             var newNode = new Node<T>(data);
             if(head == null)
-            {
-                this.head = newNode;
-            }
+                SetFirstNode(newNode);
             else
             {
                 var current = this.head;
@@ -49,8 +53,28 @@ namespace Algorithm.AlgorithmClasses
                 }
                 //새로운 노드 추가
                 current.next = newNode;
+                newNode.prev = current;
+                newNode.next = null;
             }
         }
+        
+        public void AddFirst(T data)
+        {
+            var newNode = new Node<T>(data);
+            if (head == null)
+                SetFirstNode(newNode);
+            else
+            {
+                //새로운 노드를 제일 앞에 추가
+                newNode.next = head;
+                head.prev = newNode;
+                head = newNode;
+            }
+        }
+        /// <summary>
+        /// 맨처음 발견되는 지정된 값을 제거합니다. 
+        /// </summary>
+        /// <param name="key"></param>
         public void Remove(T key)
         {
             if (head == null) return;
