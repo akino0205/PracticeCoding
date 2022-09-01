@@ -42,6 +42,9 @@ switch (Console.ReadLine())
     case "12": LongestBiotonic(); break;
     case "13": HanoiTop(); break;
     #endregion 0721
+    #region 20220901 그래프
+    case "14": DFS1(); break;
+    #endregion 20220901
     default: break;
 }
 
@@ -410,6 +413,72 @@ void HanoiTop()
 
 }
 #endregion 0721 
+#region 20220901 그래프
+///<summary>
+///https://www.acmicpc.net/problem/24479
+///</summary>
+void DFS1()
+{
+    makeGraph();
+    //key : 정점, value : 방문순서
+    int[] answer = new int[_nodeCnt+1];
+    dfs(ref answer);
+    for(int idx = 1; idx <= _nodeCnt; idx++)
+    {
+        Console.WriteLine(answer[idx]);    
+    }
+}
+#region graph
+void makeGraph()
+{
+    int[] input = Console.ReadLine().Split().Select(s => int.Parse(s)).ToArray();
+    _nodeCnt = input[0]; //정점의 수
+    int M = input[1]; //간선의 수
+    int R = input[2]; //시작 정점
+    _graph = new Dictionary<int, List<int>>();
+    for (int idx = 0; idx < M; idx++)
+    {
+        input = Console.ReadLine().Split().Select(s => int.Parse(s)).ToArray();
+        addGraph(input[0], input[1]);
+        addGraph(input[1], input[0]);
+    }
+}
+void addGraph(int key, int value)
+{
+    if (_graph.ContainsKey(key))
+        _graph[key].Add(value);
+    else
+        _graph.Add(key, new List<int>() { value });
+}
+#endregion graph
+#region dfs 
+void dfs(ref int[] answer)// 깊이우선탐색 with _graph, startnode by Stack
+{
+    int startNode = 1; // 시작 노드
+    Queue<int> visited = new(); //방문한 노드
+    Stack<int> needVisited = new(); //방문해야 하는 노드
+
+    //for start node
+    needVisited.Push(startNode);
+    answer[startNode] = 1;
+
+    int count = 1;
+    while(needVisited.Count > 0)
+    {
+        int node = needVisited.Pop();
+        if(!visited.Contains(node))
+        {
+            answer[node] = count;
+            visited.Enqueue(node);
+            count++;
+            var tempList = needVisited.ToList();
+            tempList.AddRange(_graph[node]);
+            needVisited = new Stack<int>(tempList.ToArray());
+        }
+    }
+}
+#endregion dfs
+#endregion 20220901
 public partial class Program
 {
     static int[,,] w;
@@ -418,4 +487,9 @@ public partial class Program
     static int[,] _rgbCostArr;
     static int[,] _houseCostArr;
     #endregion RGBStreet
+    #region DFS1
+    static int _nodeCnt; //정점의 수
+    //key : 정점, value : 연결된 정점들
+    static Dictionary<int, List<int>> _graph;
+    #endregion DFS1
 }
